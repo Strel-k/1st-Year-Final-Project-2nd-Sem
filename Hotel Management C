@@ -1,0 +1,51 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define STR_SIZE 1024
+
+
+int main(void) {
+	FILE* fp;
+	char names[STR_SIZE],chr;
+	int Occupants, rooms = 24, rawr = 101;
+	int total=0;
+	double cost = 0.00;
+	int a = 9;
+	while (a != 0) {
+		system("cls");
+		printf("Hotel Management\n\n[1]Add Tenant\n[2]Check Tenants\n[0]Exit\n\n");
+		printf("Choice:");
+		scanf_s("%d", &a);
+		switch (a) {
+		case 1: system("cls");
+			printf("Enter how many Occupants:");
+			scanf_s("%d", &Occupants);
+			printf("Enter Names of Occupants:\n");
+			fp = fopen("Tenants.txt", "a");
+			for (int i = 1; i <= Occupants;i++) {
+				fgets(names, STR_SIZE, stdin);
+				fputs(names,fp);
+
+			}
+			fclose(fp);
+			break;
+		case 2: system("cls");
+			printf("Occupants:\n\n");
+			fp = fopen("Tenants.txt", "r");
+			char str;
+			while ((str = fgetc(fp)) != EOF) {
+				putchar(str);
+
+				}
+			printf("\n");
+			fclose(fp);
+			system("pause");
+			break;
+		}
+
+	}
+
+
+	return 0;
+
+}
