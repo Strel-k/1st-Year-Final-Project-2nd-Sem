@@ -1,3 +1,5 @@
+//Still WIP, might be abandoned in favor for Contact management system.
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -10,7 +12,7 @@ int main(void) {
 	int Occupants, rooms = 24, rawr = 101;
 	int total=0;
 	double cost = 0.00;
-	int a = 9;
+	int a = 9; //ignore, usually set to 0, but compiler is a bitch.
 	while (a != 0) {
 		system("cls");
 		printf("Hotel Management\n\n[1]Add Tenant\n[2]Check Tenants\n[0]Exit\n\n");
@@ -33,7 +35,7 @@ int main(void) {
 			printf("Occupants:\n\n");
 			fp = fopen("Tenants.txt", "r");
 			char str;
-			while ((str = fgetc(fp)) != EOF) {
+			while ((str = fgetc(fp)) != EOF) { //prints the entire file until it reaches the end of the file, hence EOF.
 				putchar(str);
 
 				}
