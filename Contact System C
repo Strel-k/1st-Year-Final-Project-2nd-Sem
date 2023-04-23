@@ -1,0 +1,59 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define STR_SIZE 1024
+
+struct Contacts {
+	char name[STR_SIZE];
+	char email[STR_SIZE];
+	char number[STR_SIZE];
+}; 
+
+int main(void) {
+	FILE* fp;
+	int a=9;
+	while (a != 0) {
+		system("cls");
+		printf("\n[1]Add Contact\n[2]Contact Book\n[0]Exit\n\n");
+		printf("Choice:");
+		scanf("%d", &a);
+		switch (a) {
+		case 1: system("cls");
+			struct Contacts s1;
+			fp = fopen("Contacts.txt", "a");
+			printf("Enter Name of Contact:");
+			fgets(s1.name, STR_SIZE, stdin);
+			fgets(s1.name, STR_SIZE, stdin);
+			fputs(s1.name, fp);
+			printf("\nEnter Email:");
+			fgets(s1.email, STR_SIZE, stdin);
+			fputs(s1.email, fp);
+			printf("\nEnter Contact No.:");
+			fgets(s1.number, STR_SIZE, stdin);
+			fputs(s1.number, fp);
+			printf("Contact Added!");
+			printf("\n");
+			system("pause");
+			fclose(fp);
+			break;
+		case 2: system("cls");
+			printf("Contacts:\n(Name/email/contact no.)\n\n");
+			fp = fopen("Contacts.txt", "r");
+			char str;
+			while ((str = fgetc(fp)) != EOF) {
+				
+				putchar(str);
+				
+			}
+			printf("\n");
+			system("pause");
+			fclose(fp);
+			break;
+		}
+
+	}
+
+
+	return 0;
+
+}
