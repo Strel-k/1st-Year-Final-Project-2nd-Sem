@@ -11,10 +11,10 @@ struct Contacts {
 
 int main(void) {
 	FILE* fp;
-	int a=9;
+	int a = 9;
 	while (a != 0) {
 		system("cls");
-		printf("\n[1]Add Contact\n[2]Contact Book\n[0]Exit\n\n");
+		printf("\n[1]Add Contact\n[2]Contact Book\n[3]Reset Contact List\n[0]Exit\n\n");
 		printf("Choice:");
 		scanf("%d", &a);
 		switch (a) {
@@ -41,19 +41,33 @@ int main(void) {
 			fp = fopen("Contacts.txt", "r");
 			char str;
 			while ((str = fgetc(fp)) != EOF) {
-				
+
 				putchar(str);
-				
+
 			}
 			printf("\n");
 			system("pause");
 			fclose(fp);
 			break;
+		case 3: system("cls");
+			fp = fopen("Contacts.txt", "w");
+			char choice=0;
+			while ((str = fgetc(fp)) != EOF) {
+				putchar(str);
+			}
+			printf("\nAre you sure you want to reset your Contact(s) list? (Y/N):");
+			scanf(" %c", choice);
+			if (choice == 'Y' || choice == 'y') {
+				remove("Contacts.txt");
+			}
+			else if (choice == 'N' || choice == 'n') {
+				break;
+			}
 		}
 
 	}
-
-
 	return 0;
-
 }
+
+
+
