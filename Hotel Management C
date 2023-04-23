@@ -1,5 +1,5 @@
 //Still WIP, might be abandoned in favor for Contact management system.
-
+// ignore scanf_s, compiler issue.
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
