@@ -1,5 +1,5 @@
 //Still WIP, might be abandoned in favor for Contact management system.
-// ignore scanf_s, compiler issue.
+//ignore scanf_s, compiler issue.
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -7,7 +7,7 @@
 
 
 int main(void) {
-	FILE* fp;
+	FILE* fp; //Declares the file as 'fp'.
 	char names[STR_SIZE],chr;
 	int Occupants, rooms = 24, rawr = 101;
 	int total=0;
@@ -21,26 +21,26 @@ int main(void) {
 		switch (a) {
 		case 1: system("cls");
 			printf("Enter how many Occupants:");
-			scanf_s("%d", &Occupants);
+			scanf_s("%d", &Occupants); //fgets does not work. Why.
 			printf("Enter Names of Occupants:\n");
-			fp = fopen("Tenants.txt", "a");
+			fp = fopen("Tenants.txt", "a"); //opens the text file in order to add.
 			for (int i = 1; i <= Occupants;i++) {
-				fgets(names, STR_SIZE, stdin);
-				fputs(names,fp);
+				fgets(names, STR_SIZE, stdin); //Gets the input from the user.
+				fputs(names,fp); //Places the user input to the file.
 
 			}
-			fclose(fp);
+			fclose(fp); //closes file.
 			break;
 		case 2: system("cls");
 			printf("Occupants:\n\n");
-			fp = fopen("Tenants.txt", "r");
+			fp = fopen("Tenants.txt", "r"); //opens the file 'Tenants.txt' for reading.
 			char str;
 			while ((str = fgetc(fp)) != EOF) { //prints the entire file until it reaches the end of the file, hence EOF.
-				putchar(str);
+				putchar(str); //prints each string that was entered by the user.
 
 				}
 			printf("\n");
-			fclose(fp);
+			fclose(fp); // closes files.
 			system("pause");
 			break;
 		}
