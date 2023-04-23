@@ -51,7 +51,7 @@ int main(void) {
 			break;
 		case 3: system("cls");
 			fp = fopen("Contacts.txt", "w");
-			char choice=0;
+			char choice=NULL;
 			while ((str = fgetc(fp)) != EOF) {
 				putchar(str);
 			}
