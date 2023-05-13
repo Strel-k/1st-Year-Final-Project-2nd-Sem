@@ -1,0 +1,104 @@
+// Contact Management System 
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define max 2048
+
+struct Contact {
+	char name[max];
+	char number[max];
+	char final_cont[max];
+};
+
+void DisplayAll(void) {
+	FILE* dp;
+	dp = fopen("Contact.txt", "r");
+	char str1;
+	printf("Name | Contact No.|\n\n");
+	while ((str1 = fgetc(dp)) != EOF) {
+		putchar(str1);
+	}
+	printf("\n");
+	fclose(dp);
+}
+
+int main(void) {
+	struct Contact s1;
+	FILE* fp;
+	FILE* temp;
+	int a = NULL, total_contacts = 0;
+	int current_line, delete_line;
+	char search[max], buffer[max], searched[max];
+	while (a != 5) {
+		system("cls");
+		printf("Menu\n\n[1]Add Contact\n[2]Display Contact\n[3]Search Contact\n[4]Delete Contact\n[5]Exit\n\n");
+		printf("Choice:");
+		scanf("%d", &a);
+		switch (a) {
+		case 1: system("cls");
+			
+			fp = fopen("Contact.txt", "a+");
+			printf("Enter Name of Contact:");
+			scanf(" %[^\n]s", s1.name);
+			printf("Enter Contact No.:");
+			scanf(" %[^\n]s", s1.number);
+			strcat(s1.name, " ");
+			strcat(s1.name, s1.number);
+			strcpy(s1.final_cont, s1.name);
+			strcat(s1.final_cont, "\n");
+			fputs(s1.final_cont, fp);
+			printf("Contact Added!\n");
+			//fflush(stdin);
+			system("pause");
+			fclose(fp);
+			break;
+		case 2: system("cls");
+			DisplayAll();
+			system("pause");
+			break;
+		case 3: system("cls");
+			fp = fopen("Contact.txt", "r");
+			printf("Enter Name to be Searched:");
+			scanf(" %[^\n]s", search);
+			do {
+				fgets(buffer, max, fp);
+				if (strcmp(buffer, search) == 1) {
+					strcpy(searched, buffer);
+				}
+			} while (fgets(buffer, max, fp) != NULL);
+			printf("\n");
+			printf("%s", searched);
+			printf("\n");
+			//fflush(fp);s
+			system("pause");
+			fclose(fp);
+			break;
+		case 4: system("cls");
+			current_line = 1;
+			delete_line = NULL;
+			fp = fopen("Contact.txt", "r");
+			temp = fopen("Temp.txt", "w+");
+			DisplayAll();
+			printf("\nEnter Contact to Delete (0 to reset all):");
+			scanf("%d", &delete_line);
+			while (fgets(buffer, max, fp) != NULL) {
+				fgets(buffer, max, fp);
+				current_line++;
+				if (current_line != delete_line) {
+					fputs(buffer, temp);
+				}
+				
+			}
+			fclose(fp);
+			fclose(temp);
+			remove("Contact.txt");
+			rename("Temp.txt", "Contact.txt");
+			printf("\nContact Deleted!\n");
+			system("pause");
+			break;
+
+		case 5: break;
+		}
+	}
+	return 0;
+}
