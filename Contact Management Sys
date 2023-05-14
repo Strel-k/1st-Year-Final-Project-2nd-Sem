@@ -1,5 +1,5 @@
-//Contact Management System
-//Search still sucks balls.
+//Fuck searching using strings, I give up.
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -12,7 +12,7 @@ struct Contact {
 };
 
 void DisplayAll(void) {
-	FILE* dp;
+	FILE* dp;	
 	dp = fopen("Contact.txt", "r");
 	char str1[max];
 	int i = 0;
@@ -23,54 +23,57 @@ void DisplayAll(void) {
 		i++;
 	}
 	printf("-----------------------------------\n");
-	printf("\nTotal Contacts: %d", i);
+	printf("Total Contacts: %d", i);
 	printf("\n");
 	fclose(dp);
-}
+}	
 
 int main(void) {
-	struct Contact s1;
+	struct Contact s1,*ptr_s1;
+	ptr_s1 = &s1;
 	FILE* fp;
 	FILE* temp;
 	int a = NULL;
 	int current_line, delete_line;
-	char search[max], buffer[max], searched[max];
+	char  buffer[max],searched[max];
+	int search;
 	while (a != 5) {
 		system("cls");
 		printf("Contact Management System\n\n[1]Add Contact\n[2]Display Contact(s)\n[3]Search Contact\n[4]Delete Contact\n[5]Exit\n\n");
 		printf("Choice:");
 		scanf("%d", &a);
 		switch (a) {
-		case 1: system("cls");
+		case 1: //Adds a Contact
+			system("cls");
 			fp = fopen("Contact.txt", "a+");
 			printf("Enter Name of Contact:");
-			scanf(" %[^\n]s", s1.name);
+			scanf(" %[^\n]s", ptr_s1->name);
 			printf("Enter Contact No.:");
-			scanf(" %[^\n]s", s1.number);
-			strcat(s1.name, " ");
-			strcat(s1.name, s1.number);
-			strcpy(s1.final_cont, s1.name);
-			strcat(s1.final_cont, "\n");
-			fputs(s1.final_cont, fp);
+			scanf(" %[^\n]s", ptr_s1->number);
+			strcat(ptr_s1->name, " ");
+			strcat(ptr_s1->name, ptr_s1->number);
+			strcpy(ptr_s1->final_cont, ptr_s1->name);
+			strcat(ptr_s1->final_cont, "\n");
+			fputs(ptr_s1->final_cont, fp);
 			printf("Contact Added!\n");
 			system("pause");
 			fclose(fp);
 			break;
 		case 2: system("cls");
 			DisplayAll();
-			system("pause");
+			system("pause");	
 			break;
+			//Search Names listed
 		case 3: system("cls");
+			current_line = 0;
 			fp = fopen("Contact.txt", "r+");
+			DisplayAll();
 			printf("Enter Name to be Searched:");
-			scanf(" %[^\n]s", search);
+			scanf("%d", &search);
 			while (fgets(buffer, max, fp) != NULL) {
-				if (strcmp(buffer,search) >= 1) {
+				current_line++;
+				if (current_line == search) {
 					strcpy(searched, buffer);
-					break;
-				}	
-				else {
-					strcpy(searched, "User not Found!");
 				}
 			} 
 			printf("\n");
@@ -79,7 +82,8 @@ int main(void) {
 			system("pause");
 			fclose(fp);
 			break;
-		case 4: system("cls");
+		case 4: //Deletes a Line/Contact.
+			system("cls");
 			current_line = NULL;
 			delete_line = NULL;
 			fp = fopen("Contact.txt", "r");
