@@ -145,7 +145,6 @@ int main(void) {
 			temp = fopen("Temp.txt", "w+");
 			current_line = 0;
 			edit_line = NULL;
-			char look[max];
 			system("cls");
 			DisplayAll();
 			printf("Enter Line to Edit:");
