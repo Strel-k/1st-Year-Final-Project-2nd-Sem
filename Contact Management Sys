@@ -69,7 +69,7 @@ int main(void) {
 			strcat(ptr_s1->final_cont, "\n");
 			while (fgets(buffer, max, fp) != NULL) { // Checks if user already exists.
 				if (strcmp(buffer, ptr_s1->final_cont) == 0) {
-					printf("\t\t\t\t\t\tUser already exists!\n\t\t\t\t\t\t"); //If yes, prompts the user to return back to main.
+					printf("\t\t\t\t\t\tUser already exists!\n\t\t\t\t\t\t"); //If yes, returns the user to return back to main.
 					system("pause");
 					goto main;
 				}
@@ -94,9 +94,8 @@ int main(void) {
 			printf("Enter Name to be Searched:");
 			scanf(" %[^\n]", search); 
 			while (fgets(buffer, max, fp) != NULL) { //Reads the entire file. If it encounters the string, it is copied to the searched variable.
-				//printf("\n\t%s", buffer);
 				current_line++;
-				if (strstr(buffer, search) != NULL)
+				if (strstr(buffer, search) != NULL) // A string.h function that	finds the first occurence of the substring in a string haystack.
 				{
 					strcpy(searched, buffer);
 					found = 1;
@@ -109,7 +108,7 @@ int main(void) {
 			}
 			printf("\n");
 			printf("\t\t\t\t\t[%d] %s", current_line, searched);
-			printf("\n\t\t\t\t\t\t");
+			printf("\n\t\t\t\t\t");
 			system("pause");
 			fclose(fp);
 			break;
@@ -146,6 +145,7 @@ int main(void) {
 			temp = fopen("Temp.txt", "w+");
 			current_line = 0;
 			edit_line = NULL;
+			char look[max];
 			system("cls");
 			DisplayAll();
 			printf("Enter Line to Edit:");
@@ -174,7 +174,12 @@ int main(void) {
 			strcat(ptr_s1->final_cont, "\n");
 			while (fgets(buffer, max, fp) != NULL) { //It scans through the file 'till it reaches the line then the replacement is entered.
 				current_line++;
-				if (current_line == edit_line ) {	
+				if (strcmp(buffer, ptr_s1->final_cont) == 0) {
+					printf("\n\t\tError, user already exists!\n\t\t");
+					system("pause");
+					goto main;
+				}
+				 if (current_line == edit_line) {
 					fputs(ptr_s1->final_cont, temp);
 				}
 				else {
