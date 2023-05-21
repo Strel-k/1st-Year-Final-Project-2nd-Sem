@@ -15,15 +15,15 @@ int DisplayAll() { //Function that shows all contents of the file.
 	dp = fopen("Contact.txt", "r+");
 	char str1[max];
 	int i = 0;
-	printf("No. | Name | Contact No.| Email\n");
+	printf("\t\t\t\t\tNo. | Name | Contact No.| Email\n\t\t\t\t\t");
 	printf("-----------------------------------------------------------\n");
 	while (fgets(str1,max,dp)!=NULL) {
-		printf("[%d] | %s", i+1, str1);
+		printf("\t\t\t\t\t[%d] | %s", i+1, str1);
 		i++;
 	}
-	printf("-----------------------------------------------------------\n");
-	printf("Total Contacts: %d", i);
-	printf("\n");
+	printf("\t\t\t\t\t-----------------------------------------------------------\n");
+	printf("\t\t\t\t\tTotal Contacts: %d", i);
+	printf("\n\t\t\t\t\t");
 	fclose(dp);
 	return i;
 }	
@@ -37,28 +37,29 @@ int main(void) {
 	int a = NULL;
 	char choice=NULL;
 	int current_line, delete_line;
-	char  buffer[max],searched[max];
-	int search,i=1,total_contacts,edit_line;
+	char  buffer[max],searched[max],search[max];
+	int i=1,total_contacts,edit_line;
+	int found = 0;
 	while (a != 6) {
 		total_contacts = DisplayAll();
 		system("cls");
-		printf("Contact Management System\n\n[1]Add Contact\n[2]Display Contact(s)\n[3]Search Contact\n[4]Delete Contact\n[5]Edit Contacts\n[6]Exit\n\n");
-		printf("Choice:");
+		printf("\t\t\t\t\t\tContact Management System\n\n\t\t\t\t\t\t[1]Add Contact\n\t\t\t\t\t\t[2]Display Contact(s)\n\t\t\t\t\t\t[3]Search Contact\n\t\t\t\t\t\t[4]Delete Contact\n\t\t\t\t\t\t[5]Edit Contacts\n\t\t\t\t\t\t[6]Exit\n\n");
+		printf("\t\t\t\t\t\tChoice:");
 		scanf("%d", &a);
 		switch (a) {
 		case 1: //Adds a Contact.
 			system("cls");
 			fp = fopen("Contact.txt", "a+");
-			printf("Enter Name of Contact (Type 'exit' to leave):");
+			printf("\t\t\t\t\t\tEnter Name of Contact:");
 			scanf(" %[^\n]", ptr_s1->name);
-			printf("Enter Contact No.:");
+			printf("\t\t\t\t\t\tEnter Contact No.:");
 			scanf(" %[^\n]", ptr_s1->number);
 			if (strlen(ptr_s1->number) > 11||strlen(ptr_s1->number)<11) { //Checks if Number is greater or less than 11.
-				printf("Error, Contact Number is not valid!\n"); //if yes, returns user to menu.
+				printf("\t\t\t\t\t\tError, Contact Number is not valid!\n"); //if yes, returns user to menu.
 				system("pause");
 				break;
 			}
-			printf("Enter Email:");
+			printf("\t\t\t\t\t\tEnter Email:");
 			scanf(" %[^\n]", ptr_s1->email);
 			strcat(ptr_s1->name, " | "); //String manipulation to adjust to format.
 			strcat(ptr_s1->name, ptr_s1->number);
@@ -68,13 +69,13 @@ int main(void) {
 			strcat(ptr_s1->final_cont, "\n");
 			while (fgets(buffer, max, fp) != NULL) { // Checks if user already exists.
 				if (strcmp(buffer, ptr_s1->final_cont) == 0) {
-					printf("\nUser already exists!\n"); //If yes, prompts the user to return back to main.
+					printf("\t\t\t\t\t\tUser already exists!\n\t\t\t\t\t\t"); //If yes, prompts the user to return back to main.
 					system("pause");
 					goto main;
 				}
 			}
 			fputs(ptr_s1->final_cont, fp);
-			printf("Contact Added!\n");
+			printf("\t\t\t\t\t\tContact Added!\n\t\t\t\t\t\t");
 			system("pause");
 			total_contacts++;
 			fclose(fp);
@@ -87,24 +88,28 @@ int main(void) {
 		case 3: //Searches a Contact No. 
 			system("cls");
 			current_line = 0;
+			found = 0;
 			fp = fopen("Contact.txt", "r+");
 			DisplayAll();
 			printf("Enter Name to be Searched:");
-			scanf("%d", &search); //Integers only, strings wont work... too bad!
-			if (search > total_contacts) {
-				printf("Error, Contact does not exist!\n");
-				system("pause");
-				break;
-			}
-			while (fgets(buffer, max, fp) != NULL) { //Reads the entire file. If it encounters the line, it will be copied to "searched" variable.
+			scanf(" %[^\n]", search); 
+			while (fgets(buffer, max, fp) != NULL) { //Reads the entire file. If it encounters the string, it is copied to the searched variable.
+				//printf("\n\t%s", buffer);
 				current_line++;
-				if (current_line == search) {
+				if (strstr(buffer, search) != NULL)
+				{
 					strcpy(searched, buffer);
+					found = 1;
+					break;
 				}
 			}
+			if(found<1){
+				strcpy(searched, "User not found!");
+				current_line = 404;
+			}
 			printf("\n");
-			printf("[%d] %s", i, searched);
-			printf("\n");
+			printf("\t\t\t\t\t[%d] %s", current_line, searched);
+			printf("\n\t\t\t\t\t\t");
 			system("pause");
 			fclose(fp);
 			break;
@@ -115,10 +120,10 @@ int main(void) {
 			fp = fopen("Contact.txt", "r");
 			temp = fopen("Temp.txt", "w+");
 			DisplayAll();
-			printf("\nEnter Line to Delete:");
+			printf("\n\t\t\t\t\tEnter Line to Delete:");
 			scanf("%d", &delete_line);
 			if (delete_line > total_contacts) { //If the number entered is greater than the total of contacts in the file, it displays that the user does not exist.
-				printf("Error, Contact does not exist!\n");
+				printf("\t\t\t\t\t\tError, Contact does not exist!\n\t\t\t\t\t\t");
 				system("pause");
 				break;
 			}
@@ -133,33 +138,33 @@ int main(void) {
 			total_contacts--;
 			remove("Contact.txt");
 			rename("Temp.txt", "Contact.txt");
-			printf("\nContact Deleted!\n");
+			printf("\n\t\t\t\t\t\tContact Deleted!\n\t\t\t\t\t\t");
 			system("pause");
 			break;
 		case 5: 
 			fp = fopen("Contact.txt", "r+");
 			temp = fopen("Temp.txt", "w+");
-			current_line = NULL;
+			current_line = 0;
 			edit_line = NULL;
 			system("cls");
 			DisplayAll();
 			printf("Enter Line to Edit:");
 			scanf("%d", &edit_line);
 			if (edit_line > total_contacts) {
-				printf("Error, Contact does not exist!\n");
+				printf("\t\t\t\t\tError, Contact does not exist!\n\t\t\t\t\t");
 				system("pause");
 				break;
 			}
-			printf("\nEnter Edited Name:");
+			printf("\n\t\t\t\t\tEnter Edited Name:");
 			scanf(" %[^\n]", ptr_s1->name);
-			printf("\nEnter Replacement Number:");
+			printf("\n\t\t\t\t\tEnter Replacement Number:");
 			scanf(" %[^\n]", ptr_s1->number);
 			if (strlen(ptr_s1->number) > 11) { //If the number is greater or less than 11 -- it breaks and returns to the menu.
-				printf("Error, replacement number is not valid!\n");
+				printf("\t\t\t\t\t\tError, replacement number is not valid!\n\t\t\t\t\t\t");
 				system("pause");
 				break;
 			}
-			printf("\nEnter Replacement Email:");
+			printf("\n\t\t\t\t\tEnter Replacement Email:");
 			scanf(" %[^\n]", ptr_s1->email);
 			strcat(ptr_s1->name, " | "); //String manipulation to fit format.
 			strcat(ptr_s1->name, ptr_s1->number);
@@ -169,7 +174,7 @@ int main(void) {
 			strcat(ptr_s1->final_cont, "\n");
 			while (fgets(buffer, max, fp) != NULL) { //It scans through the file 'till it reaches the line then the replacement is entered.
 				current_line++;
-				if (current_line == edit_line) {	
+				if (current_line == edit_line ) {	
 					fputs(ptr_s1->final_cont, temp);
 				}
 				else {
@@ -180,11 +185,11 @@ int main(void) {
 			fclose(temp);
 			remove("Contact.txt");
 			rename("Temp.txt", "Contact.txt");
-			printf("\nLine Edited!\n");
+			printf("\n\t\t\t\t\tLine Edited!\n\t\t\t\t\t\t");
 			system("pause");
 			break;
 		case 6: break; //Magic.
-		default: printf("\nUnknown!\n");
+		default: printf("\n\t\t\t\t\tUnknown!\n\t\t\t\t\t\t");
 			system("pause");
 			break;
 		}
