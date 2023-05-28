@@ -55,9 +55,14 @@ int main(void) {
 	
 	while (Active) { //Login System.
 		system("cls");
-		printf("Welcome\n\n[1]Login]\n[2]Register\n[3]Exit\n");
+		printf("Welcome\n\n[1]Login]\n[2]Register\n[3]Exit\nLogin Attempts: %d\n\n",attempted_login);
 		printf("Choice:");
 		scanf("%d", &b);
+		if (attempted_login > 3) {
+			printf("\nLog-in attemp too many times!\nSystem turning off...\n");
+			system("pause");
+			return 0;
+		}
 		switch (b) {
 		case 1: printf("\nEnter Username:");
 			scanf(" %[^\n]s", ptr_s2->username);
@@ -79,6 +84,7 @@ int main(void) {
 			if (found == 0) {
 				printf("\nUser not found/not registered!\n");
 				system("pause");
+				attempted_login++;
 				break;
 			}
 			else if (found == 1) {
