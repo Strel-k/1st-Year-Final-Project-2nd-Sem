@@ -255,17 +255,17 @@ int main(void) {
 					break;
 				}
 				StringOrganize(ptr_s1->name, ptr_s1->number, ptr_s1->email, ptr_s1->final_cont);
-				edit_line = current_line;
-				current_line = 0;
+				edit_line = 0;
+				
 				rewind(fp);
 				while (fgets(buffer, max, fp) != NULL) { //It scans through the file 'till it reaches the line then the replacement is entered.
-					current_line++;
+					edit_line++;
 					if (strcmp(buffer, ptr_s1->final_cont) == 0) {
 						printf("\nError, user already exists!\n");
 						system("pause");
-						break;
+						goto main;
 					}
-					if (current_line == edit_line) {
+					if (edit_line==current_line) {
 						fputs(ptr_s1->final_cont, temp);
 					}
 					else {
