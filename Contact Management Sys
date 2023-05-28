@@ -28,7 +28,17 @@ int DisplayAll() { //Function that shows all contents of the file.
 	fclose(dp);
 	return i;
 }
-void LogIn() {
+
+void StringOrganize(char op1[], char op2[], char op3[],char final[]) {
+	strcat(op1, "  "); //String manipulation to adjust to format.
+	strcat(op1, op2);
+	strcat(op1, "  ");
+	strcat(op1, op3);
+	strcpy(final, op1);
+	strcat(final , "\n");
+}
+
+int main(void) {
 	int Password = NULL; // Login.
 	while (Password != pin) {
 		system("cls");
@@ -42,11 +52,7 @@ void LogIn() {
 			system("pause");
 		}
 	}
-}
-
-int main(void) {
-	LogIn();
-main:
+	main:
 	ptr_s1 = &s1;
 	FILE* fp;
 	FILE *temp;
@@ -68,12 +74,12 @@ main:
 		case 1: //Adds a Contact.
 			system("cls");
 			fp = fopen("Contact.txt", "a+");
-			printf("Enter Name of Contact(Type 'Exit' to leave):");
+			printf("Enter Name of Contact (Type 'Exit' to leave):");
 			scanf(" %[^\n]", ptr_s1->name);
 			if (strcmp(ptr_s1->name, "Exit") == 0 || strcmp(ptr_s1->name, "exit") == 0) { // Checks if the user entered the Exit line.
 				break;
 			}
-			printf("Enter Contact No.(Type 'Exit' to leave):");
+			printf("Enter Contact No. (Type 'Exit' to leave):");
 			scanf(" %[^\n]", ptr_s1->number);
 			if (strcmp(ptr_s1->number, "Exit") == 0 || strcmp(ptr_s1->number, "exit") == 0) {
 				break;
@@ -84,17 +90,12 @@ main:
 				system("pause");
 				break;
 			}
-			printf("Enter Email(Type 'Exit' to leave):");
+			printf("Enter Email (Type 'Exit' to leave):");
 			scanf(" %[^\n]", ptr_s1->email);
 			if (strcmp(ptr_s1->email, "Exit") == 0 || strcmp(ptr_s1->email, "exit") == 0) {
 				break;
 			}
-			strcat(ptr_s1->name, "  "); //String manipulation to adjust to format.
-			strcat(ptr_s1->name, ptr_s1->number);
-			strcat(ptr_s1->name, "  ");
-			strcat(ptr_s1->name, ptr_s1->email);
-			strcpy(ptr_s1->final_cont, ptr_s1->name);
-			strcat(ptr_s1->final_cont, "\n");
+			StringOrganize(ptr_s1->name, ptr_s1->number, ptr_s1->email,ptr_s1->final_cont);
 			while (fgets(buffer, max, fp) != NULL) { // Checks if user already exists.
 				if (strcmp(buffer, ptr_s1->final_cont) == 0) {
 					printf("User already exists!\n"); //If yes, returns the user to return back to main.
@@ -167,10 +168,6 @@ main:
 				break;
 			}
 			printf("\n[%d] %s\n", current_line, searched);
-			//system("pause");
-			if (found < 1 || current_line == 404) {
-				break;
-			}
 			fclose(fp);
 			fclose(temp);
 			printf("\nDo you wish to Delete this contact? (Y/N):");
@@ -251,12 +248,7 @@ main:
 				if (strcmp(ptr_s1->email, "Exit") == 0 || strcmp(ptr_s1->email, "exit") == 0) {
 					break;
 				}
-				strcat(ptr_s1->name, "  "); //String manipulation to fit format.
-				strcat(ptr_s1->name, ptr_s1->number);
-				strcat(ptr_s1->name, "  ");
-				strcat(ptr_s1->name, ptr_s1->email);
-				strcpy(ptr_s1->final_cont, ptr_s1->name);
-				strcat(ptr_s1->final_cont, "\n");
+				StringOrganize(ptr_s1->name, ptr_s1->number, ptr_s1->email, ptr_s1->final_cont);
 				edit_line = current_line;
 				current_line = 0;
 				rewind(fp);
