@@ -1,4 +1,5 @@
 //Added Login system.
+//May mura sa code na ito hihi.
 #include<stdio.h>	
 #include<stdlib.h>
 #include<string.h>
@@ -175,7 +176,7 @@ main:
 				fclose(fp);
 				fclose(temp);
 				printf("\nDo you wish to Delete this contact? (Y/N):");
-				scanf(" %c", &choice);
+				scanf(" %c", &choice); //Tangina mo.
 				if (choice == 'Y' || choice == 'y') {
 					int delete_line = current_line;
 					fp = fopen("Contact.txt", "r+");
