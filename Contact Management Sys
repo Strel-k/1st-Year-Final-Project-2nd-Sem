@@ -29,37 +29,43 @@ int DisplayAll() { //Function that shows all contents of the file.
 	return i;
 }
 
-void StringOrganize(char op1[], char op2[], char op3[],char final[]) {
-	strcat(op1, "  "); //String manipulation to adjust to format.
+void StringOrganize(char op1[], char op2[], char op3[], char final[]) { //String manipulation to adjust to format.
+	strcat(op1, "  "); 
 	strcat(op1, op2);
 	strcat(op1, "  ");
 	strcat(op1, op3);
 	strcpy(final, op1);
-	strcat(final , "\n");
+	strcat(final, "\n");
 }
 
 int main(void) {
+	int attempted_login = 0;
 	int Password = NULL; // Login.
 	while (Password != pin) {
 		system("cls");
-		printf("Welcome, Enter PIN:");
+		printf("Welcome, Enter PIN (%d Attempts):",attempted_login);
 		scanf("%d", &Password);
 		if (Password == pin) {
 			break;
 		}
+		if (attempted_login > 3) {
+			printf("\nLogin Attempted too many Times!\nSystem Turning off...\n");
+			return 0;
+		}
 		else {
 			printf("\nError, try Again!\n");
 			system("pause");
+			attempted_login++;
 		}
 	}
 	main:
 	ptr_s1 = &s1;
 	FILE* fp;
-	FILE *temp;
+	FILE* temp;
 	int a = NULL;
 	char choice = NULL;
-	int current_line,edit_line;
-	char  buffer[max], searched[max], search[max],edited_line[max];
+	int current_line, edit_line;
+	char  buffer[max], searched[max], search[max], edited_line[max];
 	int i = 1, total_contacts;
 	int found = 0;
 	char delete_line[max];
@@ -95,7 +101,7 @@ int main(void) {
 			if (strcmp(ptr_s1->email, "Exit") == 0 || strcmp(ptr_s1->email, "exit") == 0) {
 				break;
 			}
-			StringOrganize(ptr_s1->name, ptr_s1->number, ptr_s1->email,ptr_s1->final_cont);
+			StringOrganize(ptr_s1->name, ptr_s1->number, ptr_s1->email, ptr_s1->final_cont);
 			while (fgets(buffer, max, fp) != NULL) { // Checks if user already exists.
 				if (strcmp(buffer, ptr_s1->final_cont) == 0) {
 					printf("User already exists!\n"); //If yes, returns the user to return back to main.
@@ -214,7 +220,7 @@ int main(void) {
 			while (fgets(buffer, max, fp) != NULL) {
 				current_line++;
 				if (strstr(buffer, search) != NULL) {
-					strcpy(searched,buffer);
+					strcpy(searched, buffer);
 					found = 1;
 					break;
 				}
@@ -285,3 +291,4 @@ int main(void) {
 	}
 	return 0;
 }
+	
