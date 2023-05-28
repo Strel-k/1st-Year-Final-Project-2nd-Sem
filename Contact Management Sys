@@ -2,6 +2,7 @@
 #include<stdio.h>	
 #include<stdlib.h>
 #include<string.h>
+#include<stdbool.h>
 #define max 2048
 #define pin 1234
 
@@ -11,6 +12,11 @@ struct Contact {
 	char final_cont[max];
 	char email[max];
 }s1, * ptr_s1;
+
+struct Login {
+	char username[max];
+	char pin_code[max];
+}s2,*ptr_s2;
 
 int DisplayAll() { //Function that shows all contents of the file.
 	FILE* dp;
@@ -39,23 +45,77 @@ void StringOrganize(char op1[], char op2[], char op3[], char final[]) { //String
 }
 
 int main(void) {
+	ptr_s2 = &s2;
+	char buffer[max];
+	FILE* reg;
 	int attempted_login = 0;
-	int Password = NULL; // Login.
-	while (Password != pin) {
+	int b=NULL;
+	int found = 0;
+	bool Active = true;
+	
+	while (Active) { //Login System.
 		system("cls");
-		printf("Welcome, Enter PIN (%d Attempts):",attempted_login);
-		scanf("%d", &Password);
-		if (Password == pin) {
-			break;
-		}
-		if (attempted_login > 3) {
-			printf("\nLogin Attempted too many Times!\nSystem Turning off...\n");
-			return 0;
-		}
-		else {
-			printf("\nError, try Again!\n");
+		printf("Welcome\n\n[1]Login]\n[2]Register\n[3]Exit\n");
+		printf("Choice:");
+		scanf("%d", &b);
+		switch (b) {
+		case 1: printf("\nEnter Username:");
+			scanf(" %[^\n]s", ptr_s2->username);
+			printf("\nEnter PIN Code:");
+			scanf(" %[^\n]s", ptr_s2->pin_code);
+			strcat(ptr_s2->username, " ");
+			strcat(ptr_s2->username, ptr_s2->pin_code);
+			strcat(ptr_s2->username, "\n");
+			reg = fopen("Registered.txt", "r+");
+			while (fgets(buffer, max, reg) != NULL) {
+				if (strcmp(buffer,ptr_s2->username) == 0) {
+					printf("\nLogin Verified! Welcome!\n");
+					system("pause");
+					found = 1;
+					fclose(reg);
+					Active = false;
+				}
+			}
+			if (found == 0) {
+				printf("\nUser not found/not registered!\n");
+				system("pause");
+				break;
+			}
+			else if (found == 1) {
+				break;
+			}
+			fclose(reg);
+		case 2: 
+			reg = fopen("Registered.txt", "a+");
+			printf("\nEnter Username:");
+			scanf(" %[^\n]", ptr_s2->username);
+			printf("\nEnter PIN-Code:");
+			scanf(" %[^\n]", ptr_s2->pin_code);
+			strcat(ptr_s2->username, " ");
+			strcat(ptr_s2->username, ptr_s2->pin_code);
+			strcat(ptr_s2->username, "\n");
+			while (fgets(buffer, max, reg) != NULL) {
+				if (strcmp(buffer, ptr_s2->username) == 0) {
+					printf("\nUser Already Exists!\n");
+					system("pause");
+					found = 1;
+					break;
+				}
+			}
+			if (found == 1) {
+				break;
+			}
+			fputs(ptr_s2->username, reg);
+			printf("\nUser Registered!\n");
 			system("pause");
-			attempted_login++;
+			fclose(reg);
+			break;
+		case 3: return 0;
+			fclose(reg);
+		default: printf("\nUnknown!\n");
+			system("pause");
+			break;
+
 		}
 	}
 	main:
@@ -65,15 +125,14 @@ int main(void) {
 	int a = NULL;
 	char choice = NULL;
 	int current_line, edit_line;
-	char  buffer[max], searched[max], search[max], edited_line[max];
+	char  searched[max], search[max], edited_line[max];
 	int i = 1, total_contacts;
-	int found = 0;
 	char delete_line[max];
 	int search_line = NULL;
 	while (a != 6) {
 		total_contacts = DisplayAll();
 		system("cls");
-		printf("Contact Management System\n\n[1]Add Contact\n[2]Display Contact(s)\n[3]Search Contact\n[4]Delete Contact\n[5]Edit Contacts\n[6]Exit\n\n");
+		printf("Welcome, user!\nContact Management System\n\n[1]Add Contact\n[2]Display Contact(s)\n[3]Search Contact\n[4]Delete Contact\n[5]Edit Contacts\n[6]Exit\n\n");
 		printf("Choice:");
 		scanf("%d", &a);
 		switch (a) {
