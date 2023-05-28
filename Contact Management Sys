@@ -47,62 +47,64 @@ void LogIn() {
 
 int main(void) {
 	LogIn();
-	main:
+main:
 	ptr_s1 = &s1;
 	FILE* fp;
-	FILE* temp;
+	FILE *temp;
 	int a = NULL;
-	char choice = NULL;
-	int current_line, delete_line = NULL;
+	char choice = NULL; // Putangina mo kulang lang pala ng Ampersand tangina mo parin hayop ka.
+	int current_line;
 	char  buffer[max], searched[max], search[max];
 	int i = 1, total_contacts, edit_line;
 	int found = 0;
+	char delete_line[max];
+	int search_line = NULL;
 	while (a != 6) {
 		total_contacts = DisplayAll();
 		system("cls");
-		printf("\t\t\t\t\t\tContact Management System\n\n\t\t\t\t\t\t[1]Add Contact\n\t\t\t\t\t\t[2]Display Contact(s)\n\t\t\t\t\t\t[3]Search Contact\n\t\t\t\t\t\t[4]Delete Contact\n\t\t\t\t\t\t[5]Edit Contacts\n\t\t\t\t\t\t[6]Exit\n\n");
-		printf("\t\t\t\t\t\tChoice:");
+		printf("Contact Management System\n[1]Add Contact\n[2]Display Contact(s)\n[3]Search Contact\n[4]Delete Contact\n[5]Edit Contacts\n[6]Exit\n\n");
+		printf("Choice:");
 		scanf("%d", &a);
 		switch (a) {
 		case 1: //Adds a Contact.
 			system("cls");
 			fp = fopen("Contact.txt", "a+");
-			printf("\t\t\t\tEnter Name of Contact \n\t\t\t\t(Type 'Exit' to leave):");
+			printf("Enter Name of Contact(Type 'Exit' to leave):");
 			scanf(" %[^\n]", ptr_s1->name);
 			if (strcmp(ptr_s1->name, "Exit") == 0 || strcmp(ptr_s1->name, "exit") == 0) { // Checks if the user entered the Exit line.
 				break;
 			}
-			printf("\t\t\t\tEnter Contact No. \n\t\t\t\t(Type 'Exit' to leave):");
+			printf("Enter Contact No.(Type 'Exit' to leave):");
 			scanf(" %[^\n]", ptr_s1->number);
 			if (strcmp(ptr_s1->number, "Exit") == 0 || strcmp(ptr_s1->number, "exit") == 0) {
 				break;
 			}
 
 			if (strlen(ptr_s1->number) > 11 || strlen(ptr_s1->number) < 11) { //Checks if Number is greater or less than 11.
-				printf("\t\t\tError, Contact Number is not valid!\n"); //if yes, returns user to menu.
+				printf("Error, Contact Number is not valid!"); //if yes, returns user to menu.
 				system("pause");
 				break;
 			}
-			printf("\t\t\t\tEnter Email \n\t\t\t\t(Type 'Exit' to leave):");
+			printf("Enter Email(Type 'Exit' to leave):");
 			scanf(" %[^\n]", ptr_s1->email);
 			if (strcmp(ptr_s1->email, "Exit") == 0 || strcmp(ptr_s1->email, "exit") == 0) {
 				break;
 			}
-			strcat(ptr_s1->name, " | "); //String manipulation to adjust to format.
+			strcat(ptr_s1->name, "  "); //String manipulation to adjust to format.
 			strcat(ptr_s1->name, ptr_s1->number);
-			strcat(ptr_s1->name, " | ");
+			strcat(ptr_s1->name, "  ");
 			strcat(ptr_s1->name, ptr_s1->email);
 			strcpy(ptr_s1->final_cont, ptr_s1->name);
 			strcat(ptr_s1->final_cont, "\n");
 			while (fgets(buffer, max, fp) != NULL) { // Checks if user already exists.
 				if (strcmp(buffer, ptr_s1->final_cont) == 0) {
-					printf("\t\t\t\t\t\tUser already exists!\n\t\t\t\t\t\t"); //If yes, returns the user to return back to main.
+					printf("User already exists!\n"); //If yes, returns the user to return back to main.
 					system("pause");
 					goto main;
 				}
 			}
 			fputs(ptr_s1->final_cont, fp);
-			printf("\t\t\t\t\tContact Added!\n\t\t\t\t\t");
+			printf("Contact Added!\n");
 			system("pause");
 			total_contacts++;
 			fclose(fp);
@@ -136,41 +138,70 @@ int main(void) {
 				current_line = 404;
 			}
 			printf("\n");
-			printf("\t\t\t\t\t[%d] %s", current_line, searched);
-			printf("\n\t\t\t\t\t");
+			printf("[%d] %s\n", current_line, searched);
 			system("pause");
 			fclose(fp);
 			break;
-		case 4: //Deletes a Line/Contact.
-			system("cls");
-			current_line = NULL;
-			fp = fopen("Contact.txt", "r");
-			temp = fopen("Temp.txt", "w+");
-			DisplayAll();
-			printf("\n\t\t\t\t\tEnter Line to Delete (Type -1 to Exit):");
-			scanf("%d", &delete_line);
-			if (delete_line == -1) { // Prompts exit.
-				break;
-			}
-			if (delete_line > total_contacts) { //If the number entered is greater than the total of contacts in the file, it displays that the user does not exist.
-				printf("\t\t\t\t\tError, Contact does not exist!\n\t\t\t\t\t\t");
-				system("pause");
-				break;
-			}
-			while (fgets(buffer, max, fp) != NULL) {
-				current_line++;
-				if (current_line != delete_line) {
-					fputs(buffer, temp);
+			case 4: //Deletes a Line/Contact.
+				system("cls");
+				current_line = 0;
+				found = 0;
+				fp = fopen("Contact.txt", "r+");
+				temp = fopen("Temp.txt", "w+");
+				DisplayAll();
+				printf("Enter Line to Delete (Type 'Exit' to leave):");
+				scanf(" %[^\n]s", search);
+				if (strcmp(search, "Exit") == 0 || strcmp(search, "exit") == 0) {
+					break;
 				}
-			}
-			fclose(fp);
-			fclose(temp);
-			total_contacts--;
-			remove("Contact.txt");
-			rename("Temp.txt", "Contact.txt");
-			printf("\n\t\t\t\t\tContact Deleted!\n\t\t\t\t\t\t");
-			system("pause");
-			break;
+				while (fgets(buffer, max, fp) != NULL) { //Reads the entire file. If it encounters the string, it is copied to the searched variable.
+					current_line++;
+					if (strstr(buffer, search) != NULL) { // A string.h function that	finds the first occurence of the substring in a string haystack.
+						strcpy(searched, buffer);
+						found = 1;
+						break;
+					}
+				}
+				if (found == 0) {
+					printf("\nUser not Found!\n");
+					system("pause");
+					break;
+				}	
+				printf("\n[%d] %s\n", current_line, searched);
+				//system("pause");
+				if (found < 1 || current_line == 404) {
+					break;
+				}
+				fclose(fp);
+				fclose(temp);
+				printf("\nDo you wish to Delete this contact? (Y/N):");
+				scanf(" %c", &choice);
+				if (choice == 'Y' || choice == 'y') {
+					int delete_line = current_line;
+					fp = fopen("Contact.txt", "r+");
+					temp = fopen("Temp.txt", "w+");
+					rewind(fp);
+					search_line = 0;
+					while (fgets(buffer, max, fp) != NULL) {
+						search_line++;
+						if (search_line != delete_line) {
+							fputs(buffer, temp);
+						}
+					}
+					fclose(fp);
+					fclose(temp);
+					total_contacts--;
+					remove("Contact.txt");
+					rename("Temp.txt", "Contact.txt");
+					printf("\nContact Deleted!\n");
+					system("pause");
+				
+				}
+				else if (choice == 'N' || choice == 'n') {
+					break;
+				}
+				
+				break;
 		case 5: //Edits each line of text.
 			fp = fopen("Contact.txt", "r+");
 			temp = fopen("Temp.txt", "w+");
@@ -199,9 +230,9 @@ int main(void) {
 			}
 			printf("\n\t\t\t\t\tEnter Replacement Email:");
 			scanf(" %[^\n]", ptr_s1->email);
-			strcat(ptr_s1->name, " | "); //String manipulation to fit format.
+			strcat(ptr_s1->name, "  "); //String manipulation to fit format.
 			strcat(ptr_s1->name, ptr_s1->number);
-			strcat(ptr_s1->name, " | ");
+			strcat(ptr_s1->name, "  ");
 			strcat(ptr_s1->name, ptr_s1->email);
 			strcpy(ptr_s1->final_cont, ptr_s1->name);
 			strcat(ptr_s1->final_cont, "\n");
