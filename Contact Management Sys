@@ -4,7 +4,6 @@
 #include<string.h>
 #include<stdbool.h>
 #define max 2048
-#define pin 1234
 
 struct Contact {
 	char name[max];
@@ -52,16 +51,14 @@ int main(void) {
 	int b=NULL;
 	int found = 0;
 	bool Active = true;
-	
 	while (Active) { //Login System.
 		system("cls");
-		printf("Welcome\n\n[1]Login]\n[2]Register\n[3]Exit\nLogin Attempts: %d\n\n",attempted_login);
+		printf("Welcome\n\n[1]Login\n[2]Register\n[3]Exit\n\nLogin Attempts: %d\n\n",attempted_login);
 		printf("Choice:");
-		scanf("%d", &b);
+		scanf("%d", &b);	
 		if (attempted_login > 3) {
-			printf("\nLog-in attemp too many times!\nSystem turning off...\n");
-			system("pause");
-			return 0;
+			printf("\nLog-in attempt too many times!\nSystem turning off...\n");
+			return 0;	
 		}
 		switch (b) {
 		case 1: printf("\nEnter Username:");
@@ -136,7 +133,7 @@ int main(void) {
 	char delete_line[max];
 	int search_line = NULL;
 	while (a != 6) {
-		total_contacts = DisplayAll();
+		//total_contacts = DisplayAll();
 		system("cls");
 		printf("Welcome, user!\nContact Management System\n\n[1]Add Contact\n[2]Display Contact(s)\n[3]Search Contact\n[4]Delete Contact\n[5]Edit Contacts\n[6]Exit\n\n");
 		printf("Choice:");
@@ -177,7 +174,7 @@ int main(void) {
 			fputs(ptr_s1->final_cont, fp);
 			printf("Contact Added!\n");
 			system("pause");
-			total_contacts++;
+			//total_contacts++;
 			fclose(fp);
 			break;
 		case 2: //Displays All Contents in File.
@@ -257,7 +254,7 @@ int main(void) {
 				}
 				fclose(fp);
 				fclose(temp);
-				total_contacts--;
+				//total_contacts--;
 				remove("Contact.txt");
 				rename("Temp.txt", "Contact.txt");
 				printf("\nContact Deleted!\n");
