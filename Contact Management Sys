@@ -246,7 +246,6 @@
 						search_line++;
 						if (search_line != current_line) {
 							fputs(buffer, temp);
-							break;
 						}
 						
 					}
@@ -323,7 +322,6 @@
 						}
 						if (edit_line==current_line) {
 							fputs(ptr_s1->final_cont, temp);
-							break;
 						}
 						else {
 							fputs(buffer, temp);
