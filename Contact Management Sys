@@ -18,7 +18,6 @@ struct Login {
 }s2, * ptr_s2;
 
 
-
 void StringOrganize(char op1[], char op2[], char op3[], char final[]) { //String manipulation to adjust to format.
 	strcat(op1, "  ");
 	strcat(op1, op2);
@@ -27,6 +26,7 @@ void StringOrganize(char op1[], char op2[], char op3[], char final[]) { //String
 	strcpy(final, op1);
 	strcat(final, "\n");
 }
+
 void DisplayAll(char op1[]) { //Function that shows all contents of the file.
 	FILE* dp;
 	dp = fopen(op1, "r+");
@@ -48,6 +48,7 @@ void DisplayAll(char op1[]) { //Function that shows all contents of the file.
 	fflush(dp);
 	fclose(dp);
 }
+
 int main(void) {
 login:
 	ptr_s2 = &s2;
@@ -120,7 +121,8 @@ login:
 				break;
 			}
 			fputs(ptr_s2->username, reg);
-			
+			fclose(reg);
+			reg = fopen(filename, "w+");
 			printf("\nUser Registered!\n");
 			system("pause");
 			fclose(reg);
@@ -148,8 +150,6 @@ login:
 		switch (a) {
 		case 1: //Adds a Contact.
 			found = 0;
-			fp = fopen(filename, "w+");
-			fclose(fp);
 			system("cls");
 			printf("Enter Name of Contact (Type 'Exit' to leave):");
 			scanf(" %[^\n]", ptr_s1->name);
@@ -397,5 +397,4 @@ login:
 		}
 	}
 	return 0;
-
 }	
