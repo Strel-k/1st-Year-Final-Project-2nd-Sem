@@ -245,7 +245,7 @@ main:
 				system("pause");
 				break;
 			}
-			//fflush(fp);
+			fflush(fp);
 			rewind(fp);
 			fclose(fp);
 			printf("\n[%d] %s\n", current_line, searched);
