@@ -32,7 +32,6 @@ void DisplayAll(char op1[]) { //Function that shows all contents of the file.
 	dp = fopen(op1, "r+");
 	if (dp == NULL) {
 		printf("\nNo Contacts at this Time\n");
-		system("pause");
 		return;
 	}
 	char str1[max];	
