@@ -17,10 +17,25 @@ struct Login {
 	char pin_code[max];
 }s2, * ptr_s2;
 
-void DisplayAll() { //Function that shows all contents of the file.
+
+
+void StringOrganize(char op1[], char op2[], char op3[], char final[]) { //String manipulation to adjust to format.
+	strcat(op1, "  ");
+	strcat(op1, op2);
+	strcat(op1, "  ");
+	strcat(op1, op3);
+	strcpy(final, op1);
+	strcat(final, "\n");
+}
+void DisplayAll(char op1[]) { //Function that shows all contents of the file.
 	FILE* dp;
-	dp = fopen("Contact.txt", "r+");
-	char str1[max];
+	dp = fopen(op1, "r+");
+	if (dp == NULL) {
+		printf("\nNo Contacts at this Time\n");
+		system("pause");
+		return;
+	}
+	char str1[max];	
 	int i = 0;
 	printf("No. | Name | Contact No.| Email\n");
 	printf("-----------------------------------------------------------\n");
@@ -34,20 +49,10 @@ void DisplayAll() { //Function that shows all contents of the file.
 	fflush(dp);
 	fclose(dp);
 }
-
-void StringOrganize(char op1[], char op2[], char op3[], char final[]) { //String manipulation to adjust to format.
-	strcat(op1, "  ");
-	strcat(op1, op2);
-	strcat(op1, "  ");
-	strcat(op1, op3);
-	strcpy(final, op1);
-	strcat(final, "\n");
-}
-
 int main(void) {
 login:
 	ptr_s2 = &s2;
-	char buffer[max];
+	char buffer[max],filename[max];
 	FILE* reg;
 	int attempted_login = 0;
 	int b = NULL;
@@ -69,6 +74,8 @@ login:
 			scanf(" %[^\n]s", ptr_s2->pin_code);
 			strcat(ptr_s2->username, " ");
 			strcat(ptr_s2->username, ptr_s2->pin_code);
+			strcpy(filename, ptr_s2->username);
+			strcat(filename, ".txt");
 			strcat(ptr_s2->username, "\n");
 			reg = fopen("Registered.txt", "r+");
 			while (fgets(buffer, max, reg) != NULL) {
@@ -99,6 +106,8 @@ login:
 			scanf(" %[^\n]", ptr_s2->pin_code);
 			strcat(ptr_s2->username, " ");
 			strcat(ptr_s2->username, ptr_s2->pin_code);
+			strcpy(filename, ptr_s2->username);
+			strcat(filename, ".txt");
 			strcat(ptr_s2->username, "\n");
 			while (fgets(buffer, max, reg) != NULL) {
 				if (strcmp(buffer, ptr_s2->username) == 0) {
@@ -112,6 +121,7 @@ login:
 				break;
 			}
 			fputs(ptr_s2->username, reg);
+			
 			printf("\nUser Registered!\n");
 			system("pause");
 			fclose(reg);
@@ -124,7 +134,8 @@ login:
 
 		}
 	} //End of Login System.
-main:
+	
+	main:
 	ptr_s1 = &s1;
 	FILE* fp, * temp;
 	int a = NULL, current_line, edit_line, search_line = NULL;
@@ -138,6 +149,8 @@ main:
 		switch (a) {
 		case 1: //Adds a Contact.
 			found = 0;
+			fp = fopen(filename, "w+");
+			fclose(fp);
 			system("cls");
 			printf("Enter Name of Contact (Type 'Exit' to leave):");
 			scanf(" %[^\n]", ptr_s1->name);
@@ -160,20 +173,22 @@ main:
 				break;
 			}
 			StringOrganize(ptr_s1->name, ptr_s1->number, ptr_s1->email, ptr_s1->final_cont);
-			fp = fopen("Contact.txt", "r+");
+			fp = fopen(filename, "r+");
 			while (fgets(buffer, max, fp) != NULL) { // Checks if user already exists.
 				if (strcmp(buffer, ptr_s1->final_cont) == 0) {
 					found = 1;
 					break;
 				}
 			}
+			fflush(fp);
+			rewind(fp);
 			fclose(fp);
 			if (found == 1) {
 				printf("\nUser already exists!\n");
 				system("pause");
 				break;
 			}
-			fp = fopen("Contact.txt", "a+");
+			fp = fopen(filename, "a+");
 			fputs(ptr_s1->final_cont, fp);
 			printf("Contact Added!\n");
 			system("pause");
@@ -189,7 +204,7 @@ main:
 				system("pause");
 				break;
 			}
-			DisplayAll();
+			DisplayAll(filename);
 			rewind(fp);
 			fflush(fp);
 			fclose(fp);
@@ -199,8 +214,8 @@ main:
 			system("cls");
 			current_line = 1;
 			found = 0;
-			fp = fopen("Contact.txt", "r");
-			DisplayAll();
+			fp = fopen(filename, "r");
+			DisplayAll(filename);
 			printf("Enter Name to be Searched (Type Exit to leave):");
 			scanf(" %[^\n]", search);
 			if (strcmp(search, "Exit") == 0 || strcmp(search, "exit") == 0) {
@@ -231,8 +246,8 @@ main:
 			system("cls");
 			current_line = 0;
 			found = 0;
-			fp = fopen("Contact.txt", "r");
-			DisplayAll();
+			fp = fopen(filename, "r+");
+			DisplayAll(filename);
 			printf("Enter Line to Delete (Type 'Exit' to leave):");
 			scanf(" %[^\n]s", search);
 			if (strcmp(search, "Exit") == 0 || strcmp(search, "exit") == 0) {
@@ -259,7 +274,7 @@ main:
 			printf("\nDo you wish to Delete this contact? (Y/N):");
 			scanf(" %c", &choice);
 			if (choice == 'Y' || choice == 'y') {
-				fp = fopen("Contact.txt", "r+");
+				fp = fopen(filename, "r+");
 				temp = fopen("Temp.txt", "w");
 				search_line = 0;
 				while (fgets(buffer, max, fp) != NULL) {
@@ -273,8 +288,8 @@ main:
 				rewind(fp);
 				fclose(fp);
 				fclose(temp);
-				remove("Contact.txt");
-				rename("Temp.txt", "Contact.txt");
+				remove(filename);
+				rename("Temp.txt",filename);
 				printf("\nContact Deleted!\n");
 				system("pause");
 				break;
@@ -283,11 +298,11 @@ main:
 				break;
 			}
 		case 5: //Edits each line of text.
-			fp = fopen("Contact.txt", "r");
+			fp = fopen(filename, "r+");
 			current_line = 0;
 			found = 0;
 			system("cls");
-			DisplayAll();
+			DisplayAll(filename);
 			printf("Enter Line to Edit (Type 'Exit' to Leave):");
 			scanf(" %[^\n]s", search);
 			if (strcmp(search, "Exit") == 0 || strcmp(search, "exit") == 0) {
@@ -335,7 +350,7 @@ main:
 					break;
 				}
 				StringOrganize(ptr_s1->name, ptr_s1->number, ptr_s1->email, ptr_s1->final_cont);
-				fp = fopen("Contact.txt", "r+");
+				fp = fopen(filename, "r+");
 				temp = fopen("Temp.txt", "w");
 				edit_line = 0;
 				while (fgets(buffer, max, fp) != NULL) { //It scans through the file 'till it reaches the line then the replacement is entered.
@@ -351,14 +366,13 @@ main:
 					else {
 						fputs(buffer, temp);
 					}
-
 				}
 				rewind(fp);
 				fflush(fp);
 				fclose(fp);
 				fclose(temp);
-				remove("Contact.txt");
-				rename("Temp.txt", "Contact.txt");
+				remove(filename);
+				rename("Temp.txt", filename);
 				printf("\nLine Edited!\n");
 				system("pause");
 				break;
@@ -384,4 +398,5 @@ main:
 		}
 	}
 	return 0;
+
 }	
