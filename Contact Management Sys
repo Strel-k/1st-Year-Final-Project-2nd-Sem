@@ -39,7 +39,7 @@ void DisplayAll(char op1[]) { //Function that shows all contents of the file.
 	printf("No. | Name | Contact No.| Email\n");
 	printf("-----------------------------------------------------------\n");
 	while (fgets(str1, max, dp) != NULL) {
-		printf("[%d] | %s", i + 1, str1);
+		printf("[%d] | %s", i , str1);
 		i++;
 	}
 	printf("-----------------------------------------------------------\n");
